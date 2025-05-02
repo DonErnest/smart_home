@@ -20,6 +20,14 @@ class Gadget {
 
   Gadget({String? id, required this.name, required this.status})
     : id = id ?? uuid.v4();
+
+  Gadget copyWith({String? id, String? name, GadgetStatus? status}) {
+    return Gadget(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      status: status ?? this.status,
+    );
+  }
 }
 
 enum LightState {
@@ -35,7 +43,27 @@ enum LightState {
 class Light extends Gadget {
   final LightState state;
 
-  Light({required super.name, required super.status, required this.state});
+  Light({
+    super.id,
+    required super.name,
+    required super.status,
+    required this.state,
+  });
+
+  @override
+  Light copyWith({
+    String? id,
+    String? name,
+    GadgetStatus? status,
+    LightState? state,
+  }) {
+    return Light(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      status: status ?? this.status,
+      state: state ?? this.state,
+    );
+  }
 }
 
 enum ConditioningMode {
@@ -73,3 +101,8 @@ class Teapot extends Gadget {
     required this.sendingDataToCIA,
   });
 }
+
+
+final sampleLightingAppliances = [
+  Light(name: "Гостиная", status: GadgetStatus.active, state: LightState.off),
+];
