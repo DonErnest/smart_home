@@ -13,16 +13,20 @@ class WidgetsList extends StatefulWidget {
 
 class _WidgetsListState extends State<WidgetsList> {
   late LightingProvider lightningProvider;
+  late ConditioningProvider conditioningProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     lightningProvider = context.watch<LightingProvider>();
+    conditioningProvider = context.watch<ConditioningProvider>();
   }
 
   String getGadgetTitle(Gadget gadget) {
     if (gadget is Light) {
       return "Light: ${gadget.name}";
+    } else if (gadget is Conditioning) {
+      return "Conditioner: ${gadget.name}";
     }
     return "something";
   }
@@ -30,13 +34,17 @@ class _WidgetsListState extends State<WidgetsList> {
 
   @override
   Widget build(BuildContext context) {
+    List<Gadget> allGadgets = [
+      ...lightningProvider.lighting,
+      ...conditioningProvider.conditioners
+    ];
     return ScreenCanvas(
       widget: ListView.builder(
-        itemCount: lightningProvider.lighting.length,
+        itemCount: allGadgets.length,
         itemBuilder:
             (ctx, idx) => Card(
               child: ListTile(
-                title: Text(getGadgetTitle(lightningProvider.lighting[idx])),
+                title: Text(getGadgetTitle(allGadgets[idx])),
               ),
             ),
       ),
