@@ -31,7 +31,7 @@ class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
   }
 
   String getDisplayMessage(Gadget gadget) {
-    if (gadget is Light) {
+    if (gadget is Conditioning) {
       return gadget.state.displayStatus;
     }
     return "something";
@@ -46,7 +46,11 @@ class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
 
   void pushGadget(Gadget gadget) {
     if (gadget is Conditioning) {
-      Navigator.pushNamed(context, AppRoutes.widget, arguments: {"id": gadget.id, "type": GadgetType.conditioner});
+      Navigator.pushNamed(
+        context,
+        AppRoutes.widget,
+        arguments: {"id": gadget.id, "type": gadget.type},
+      );
     }
   }
 
@@ -54,28 +58,40 @@ class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return SliverGrid(
-      // itemCount: widget.appliances.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1,
       ),
       delegate: SliverChildBuilderDelegate(
         (ctx, idx) => InkWell(
+          overlayColor: WidgetStateProperty.all(Colors.green.shade100),
           onTap: () => {switchGadget(widget.appliances[idx])},
           onLongPress: () {
             pushGadget(widget.appliances[idx]);
           },
           child: GridTile(
-            header: Text(
-              widget.appliances[idx].name,
-              textAlign: TextAlign.center,
-              style: textTheme.titleLarge,
+            header: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+              child: Text(
+                widget.appliances[idx].name,
+                textAlign: TextAlign.center,
+                style: textTheme.titleLarge,
+              ),
             ),
-            footer: Text(
-              getDisplayMessage(widget.appliances[idx]),
-              textAlign: TextAlign.center,
-              style: textTheme.titleLarge,
+            footer: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+              child: Text(
+                getDisplayMessage(widget.appliances[idx]),
+                textAlign: TextAlign.center,
+                style: textTheme.titleLarge,
+              ),
             ),
-            child: Container(child: Icon(getIcon(widget.appliances[idx]))),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2.0),
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: Icon(getIcon(widget.appliances[idx])),
+            ),
           ),
         ),
         childCount: widget.appliances.length,

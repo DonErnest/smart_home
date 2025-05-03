@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_home/app_routes.dart';
 import 'package:smart_home/models/gadget.dart';
 import 'package:smart_home/providers/smart_home_provider.dart';
 import 'package:smart_home/widgets/canvas.dart';
@@ -31,20 +32,30 @@ class _WidgetsListState extends State<WidgetsList> {
     return "something";
   }
 
+  void goToAppliance(Gadget gadget) {
+    Navigator.pushNamed(
+      context,
+      AppRoutes.widget,
+      arguments: {"id": gadget.id, "type": gadget.type},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Gadget> allGadgets = [
       ...lightningProvider.lighting,
-      ...conditioningProvider.conditioners
+      ...conditioningProvider.conditioners,
     ];
     return ScreenCanvas(
       widget: ListView.builder(
         itemCount: allGadgets.length,
         itemBuilder:
-            (ctx, idx) => Card(
-              child: ListTile(
-                title: Text(getGadgetTitle(allGadgets[idx])),
+            (ctx, idx) => GestureDetector(
+              onTap: () {
+                goToAppliance(allGadgets[idx]);
+              },
+              child: Card(
+                child: ListTile(title: Text(getGadgetTitle(allGadgets[idx]))),
               ),
             ),
       ),

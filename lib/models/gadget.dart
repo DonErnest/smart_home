@@ -22,8 +22,9 @@ class Gadget {
   late final String id;
   final String name;
   final GadgetStatus status;
+  final GadgetType type;
 
-  Gadget({String? id, required this.name, required this.status})
+  Gadget({String? id, required this.name, required this.status, required this.type})
     : id = id ?? uuid.v4();
 
   Gadget copyWith({String? id, String? name, GadgetStatus? status}) {
@@ -31,6 +32,7 @@ class Gadget {
       id: id ?? this.id,
       name: name ?? this.name,
       status: status ?? this.status,
+      type: type,
     );
   }
 }
@@ -53,7 +55,7 @@ class Light extends Gadget {
     required super.name,
     required super.status,
     required this.state,
-  });
+  }): super(type: GadgetType.light);
 
   @override
   Light copyWith({
@@ -102,7 +104,7 @@ class Conditioning extends Gadget {
     required this.temperature,
     required this.mode,
     required this.state,
-  });
+  }): super(type: GadgetType.conditioner);
 
   @override
   Conditioning copyWith({
@@ -135,7 +137,7 @@ class Teapot extends Gadget {
     required this.waterLevelMl,
     required this.temperature,
     required this.sendingDataToCIA,
-  });
+  }): super(type: GadgetType.teapot);
 }
 
 

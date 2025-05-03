@@ -17,6 +17,7 @@ class GadgetSettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<GadgetSettingsScreen> {
   late Gadget gadget;
   late ConditioningProvider conditioningProvider;
+  late LightingProvider lightningProvider;
 
   final gadgetFormController = GadgetFormController();
 
@@ -24,12 +25,21 @@ class _SettingsScreenState extends State<GadgetSettingsScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     conditioningProvider = context.watch<ConditioningProvider>();
+    lightningProvider = context.watch<LightingProvider>();
     final gadgetArgs = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final gadgetId = gadgetArgs["id"];
     final gadgetType = gadgetArgs["type"];
-    if (gadgetType == GadgetType.conditioner) {
-      gadget = conditioningProvider.conditioners.firstWhere((gadget) => gadget.id == gadgetId);
+    switch(gadgetType) {
+      case GadgetType.conditioner:
+        gadget = conditioningProvider.conditioners.firstWhere((gadget) =>
+        gadget
+            .id == gadgetId);
+      case GadgetType.light:
+        gadget = lightningProvider.lighting.firstWhere((gadget) =>
+        gadget.id ==
+            gadgetId);
     }
+
   }
 
   @override
@@ -43,6 +53,9 @@ class _SettingsScreenState extends State<GadgetSettingsScreen> {
       if (gadget is Conditioning) {
         final editedGadget = gadgetFormController.getUpdatedConditioner(gadget as Conditioning);
         conditioningProvider.editConditioningAppliance(editedGadget);
+      } else if (gadget is Light) {
+        final editedGadget = gadgetFormController.getUpdatedLight(gadget as Light);
+        lightningProvider.editLightingAppliance(editedGadget);
       }
       Navigator.pop(context);
     }
