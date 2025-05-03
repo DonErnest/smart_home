@@ -112,6 +112,7 @@ class _GadgetFormState extends State<GadgetForm> {
       return [];
     } else if (gadget is Teapot) {
       return [
+        Text("Send data to CIA"),
         FormField<bool>(
           initialValue: gadget.sendingDataToCIA,
           validator: (value) => value == false ? "You are cute. Ha-ha. No" : null,
