@@ -12,11 +12,7 @@ enum GadgetStatus {
   const GadgetStatus(this.displayStatus);
 }
 
-enum GadgetType {
-  light,
-  conditioner,
-  teapot;
-}
+enum GadgetType { light, conditioner, teapot }
 
 class Gadget {
   late final String id;
@@ -24,8 +20,12 @@ class Gadget {
   final GadgetStatus status;
   final GadgetType type;
 
-  Gadget({String? id, required this.name, required this.status, required this.type})
-    : id = id ?? uuid.v4();
+  Gadget({
+    String? id,
+    required this.name,
+    required this.status,
+    required this.type,
+  }) : id = id ?? uuid.v4();
 
   Gadget copyWith({String? id, String? name, GadgetStatus? status}) {
     return Gadget(
@@ -55,7 +55,7 @@ class Light extends Gadget {
     required super.name,
     required super.status,
     required this.state,
-  }): super(type: GadgetType.light);
+  }) : super(type: GadgetType.light);
 
   @override
   Light copyWith({
@@ -104,7 +104,7 @@ class Conditioning extends Gadget {
     required this.temperature,
     required this.mode,
     required this.state,
-  }): super(type: GadgetType.conditioner);
+  }) : super(type: GadgetType.conditioner);
 
   @override
   Conditioning copyWith({
@@ -121,31 +121,79 @@ class Conditioning extends Gadget {
       status: status ?? this.status,
       state: state ?? this.state,
       temperature: temperature ?? this.temperature,
-      mode: mode ?? this.mode
+      mode: mode ?? this.mode,
     );
   }
+}
+
+enum TeapotState {
+  heating("Heating"),
+  idle("Idle");
+
+  final String displayStatus;
+
+  const TeapotState(this.displayStatus);
 }
 
 class Teapot extends Gadget {
   final double waterLevelMl;
   final double temperature;
   final bool sendingDataToCIA;
+  final TeapotState state;
 
   Teapot({
+    super.id,
     required super.name,
     required super.status,
     required this.waterLevelMl,
     required this.temperature,
     required this.sendingDataToCIA,
-  }): super(type: GadgetType.teapot);
-}
+    required this.state,
+  }) : super(type: GadgetType.teapot);
 
+  @override
+  Teapot copyWith({
+    String? id,
+    String? name,
+    GadgetStatus? status,
+    double? temperature,
+    double? waterLevelMl,
+    TeapotState? state,
+    bool? sendingDataToCIA,
+  }) {
+    return Teapot(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      status: status ?? this.status,
+      state: state ?? this.state,
+      temperature: temperature ?? this.temperature,
+      waterLevelMl: waterLevelMl ?? this.waterLevelMl,
+      sendingDataToCIA: sendingDataToCIA ?? this.sendingDataToCIA,
+    );
+  }
+}
 
 final sampleLightingAppliances = [
   Light(name: "Гостиная", status: GadgetStatus.active, state: LightState.off),
 ];
 
+final sampleTeapotAppliances = [
+  Teapot(
+    name: "Чайник умный",
+    status: GadgetStatus.active,
+    state: TeapotState.idle,
+    temperature: 20.0,
+    waterLevelMl: 400.0,
+    sendingDataToCIA: true,
+  ),
+];
 
 final sampleConditioningAppliances = [
-  Conditioning(name: "Спальня", status: GadgetStatus.active, temperature: 27, mode: ConditioningMode.cooling, state: ConditionState.on),
+  Conditioning(
+    name: "Спальня",
+    status: GadgetStatus.active,
+    temperature: 27,
+    mode: ConditioningMode.cooling,
+    state: ConditionState.on,
+  ),
 ];

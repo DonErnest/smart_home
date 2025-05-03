@@ -14,6 +14,7 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (ctx) => LightingProvider()),
           ChangeNotifierProvider(create: (ctx) => ConditioningProvider()),
+          ChangeNotifierProvider(create: (ctx) => TeapotProvider()),
         ],
         child: MaterialApp(
           routes: {

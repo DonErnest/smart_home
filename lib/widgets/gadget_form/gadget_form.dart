@@ -24,9 +24,9 @@ class _GadgetFormState extends State<GadgetForm> {
   late final List<bool> selectedModes;
   late LightingProvider lightningProvider;
   late ConditioningProvider conditioningProvider;
-  
+
   late ConditioningMode? selectedMode;
-  
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -69,8 +69,14 @@ class _GadgetFormState extends State<GadgetForm> {
               return "please, enter temperature";
             }
             final tempAsDouble = double.parse(value);
-            if (selectedMode == ConditioningMode.heating && (tempAsDouble > 25.0 || tempAsDouble < 20)) {
+            if (selectedMode == ConditioningMode.heating &&
+                (tempAsDouble > 25.0 || tempAsDouble < 20)) {
               return "Conditioner can heat only in range from 20 to 25 degrees!";
+            } else if (
+            selectedMode == ConditioningMode.cooling &&
+                (tempAsDouble > 28.0 || tempAsDouble < 18)
+            ) {
+              return "Conditioner can cool only in range from 18 to 28 degrees!";
             }
             return null;
           },
@@ -118,21 +124,24 @@ class _GadgetFormState extends State<GadgetForm> {
               maxLines: 1,
               maxLength: 30,
               validator: (value) {
-                if(value == null) {
+                if (value == null) {
                   return "Please, enter name of the appliance!";
                 }
                 final allGadgets = <Gadget>[
                   ...lightningProvider.lighting,
                   ...conditioningProvider.conditioners,
                 ];
-                if (allGadgets.indexWhere((gadget) => gadget.name == value) !=
+                if (allGadgets.indexWhere(
+                      (gadget) =>
+                          gadget.name == value && widget.gadget.id != gadget.id,
+                    ) !=
                     -1) {
                   return "Gadget with such name already exists!";
                 }
                 return null;
               },
             ),
-             if (formFields.isNotEmpty) ...formFields,
+            if (formFields.isNotEmpty) ...formFields,
           ],
         ),
       ),

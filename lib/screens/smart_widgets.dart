@@ -16,12 +16,14 @@ class SmartWidgetsScreen extends StatefulWidget {
 class _SmartWidgetsScreenState extends State<SmartWidgetsScreen> {
   late LightingProvider lightningProvider;
   late ConditioningProvider conditioningProvider;
+  late TeapotProvider teapotProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     lightningProvider = context.watch<LightingProvider>();
     conditioningProvider = context.watch<ConditioningProvider>();
+    teapotProvider = context.watch<TeapotProvider>();
   }
 
   void goToList() {
@@ -40,6 +42,15 @@ class _SmartWidgetsScreenState extends State<SmartWidgetsScreen> {
           SmallAppliancesBuilder(
             manipulateGadget: lightningProvider.editLightingAppliance,
             appliances: lightningProvider.lighting,
+            startAsyncManipulation: (_){},
+            cancelAsyncManipulation: (_) {},
+          ),
+          const SliverAppBar(title: Text('Teapots'), expandedHeight: 100),
+          SmallAppliancesBuilder(
+            manipulateGadget: teapotProvider.editTeapot,
+            appliances: teapotProvider.teapots,
+            startAsyncManipulation: teapotProvider.initiateBoiling,
+            cancelAsyncManipulation: teapotProvider.cancelAsyncProcess,
           ),
           const SliverAppBar(title: Text('Conditioning'), expandedHeight: 100),
           BigAppliancesBuilder(
