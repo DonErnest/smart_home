@@ -12,6 +12,12 @@ enum GadgetStatus {
   const GadgetStatus(this.displayStatus);
 }
 
+enum GadgetType {
+  light,
+  conditioner,
+  teapot;
+}
+
 class Gadget {
   late final String id;
   final String name;

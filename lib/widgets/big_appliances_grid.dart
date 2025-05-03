@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home/app_routes.dart';
 import 'package:smart_home/models/gadget.dart';
 import 'package:smart_home/services/conditioning.dart';
 import 'package:smart_home/services/light.dart';
@@ -21,8 +22,8 @@ class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
   IconData getIcon(Gadget gadget) {
     if (gadget is Conditioning && gadget.state == ConditionState.on) {
       return switch (gadget.mode) {
-        ConditioningMode.cooling => Icons.snowing,
-      ConditioningMode.heating => Icons.sunny,
+        ConditioningMode.cooling => Icons.ac_unit,
+        ConditioningMode.heating => Icons.sunny,
         _ => Icons.air,
       };
     }
@@ -37,12 +38,15 @@ class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
   }
 
   void switchGadget(Gadget gadget) {
+    if (gadget is Conditioning) {
+      final editedGadget = turnConditioning(gadget);
+      widget.manipulateGadget(editedGadget);
+    }
   }
 
   void pushGadget(Gadget gadget) {
     if (gadget is Conditioning) {
-      final editedGadget = turnConditioning(gadget);
-      widget.manipulateGadget(editedGadget);
+      Navigator.pushNamed(context, AppRoutes.widget, arguments: {"id": gadget.id, "type": GadgetType.conditioner});
     }
   }
 
@@ -55,7 +59,7 @@ class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
         crossAxisCount: 1,
       ),
       delegate: SliverChildBuilderDelegate(
-            (ctx, idx) => InkWell(
+        (ctx, idx) => InkWell(
           onTap: () => {switchGadget(widget.appliances[idx])},
           onLongPress: () {
             pushGadget(widget.appliances[idx]);
