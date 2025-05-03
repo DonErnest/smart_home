@@ -5,7 +5,6 @@ const uuid = Uuid();
 enum GadgetStatus {
   disconnected("Disconnected"),
   active("Active"),
-  processing("Processing"),
   alert("Alert");
 
   final String displayStatus;
@@ -66,6 +65,15 @@ class Light extends Gadget {
   }
 }
 
+enum ConditionState {
+  off("Off"),
+  on("On");
+
+  final String displayStatus;
+
+  const ConditionState(this.displayStatus);
+}
+
 enum ConditioningMode {
   heating("Heating"),
   cooling("Cooling"),
@@ -79,13 +87,35 @@ enum ConditioningMode {
 class Conditioning extends Gadget {
   final double temperature;
   final ConditioningMode mode;
+  final ConditionState state;
 
   Conditioning({
+    super.id,
     required super.name,
     required super.status,
     required this.temperature,
     required this.mode,
+    required this.state,
   });
+
+  @override
+  Conditioning copyWith({
+    String? id,
+    String? name,
+    GadgetStatus? status,
+    ConditionState? state,
+    ConditioningMode? mode,
+    double? temperature,
+  }) {
+    return Conditioning(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      status: status ?? this.status,
+      state: state ?? this.state,
+      temperature: temperature ?? this.temperature,
+      mode: mode ?? this.mode
+    );
+  }
 }
 
 class Teapot extends Gadget {
@@ -105,4 +135,9 @@ class Teapot extends Gadget {
 
 final sampleLightingAppliances = [
   Light(name: "Гостиная", status: GadgetStatus.active, state: LightState.off),
+];
+
+
+final sampleConditioningAppliances = [
+  Conditioning(name: "Спальня", status: GadgetStatus.active, temperature: 27, mode: ConditioningMode.cooling, state: ConditionState.on),
 ];

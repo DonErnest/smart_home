@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:smart_home/models/gadget.dart';
 
 

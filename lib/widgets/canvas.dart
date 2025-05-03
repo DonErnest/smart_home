@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ScrollableScreenCanvas extends StatelessWidget {
+class ScreenCanvas extends StatelessWidget {
   final List<Widget>? appBarActions;
   final Widget? bottomBar;
   final Widget widget;
 
-  const ScrollableScreenCanvas({
+  const ScreenCanvas({
     super.key,
     required this.widget,
     this.appBarActions,

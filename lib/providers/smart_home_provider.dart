@@ -30,3 +30,16 @@ class LightingProvider extends GadgetProvider {
   }
 }
 
+class ConditioningProvider extends GadgetProvider {
+  List<Conditioning> _conditioners = sampleConditioningAppliances;
+  List<Conditioning> get conditioners => _conditioners;
+
+  void addConditioningAppliance(Conditioning newAppliance) {
+    addAppliance(_conditioners, newAppliance);
+  }
+
+  void editConditioningAppliance(Gadget editedAppliance) {
+    final conditioner = editedAppliance as Conditioning;
+    editAppliance(_conditioners, conditioner);
+  }
+}

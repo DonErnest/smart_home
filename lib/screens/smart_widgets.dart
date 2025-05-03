@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_home/app_routes.dart';
 import 'package:smart_home/providers/smart_home_provider.dart';
+import 'package:smart_home/widgets/big_appliances_grid.dart';
 import 'package:smart_home/widgets/canvas.dart';
 import 'package:smart_home/widgets/small_appliances_grid.dart';
 
@@ -13,22 +15,36 @@ class SmartWidgetsScreen extends StatefulWidget {
 
 class _SmartWidgetsScreenState extends State<SmartWidgetsScreen> {
   late LightingProvider lightningProvider;
+  late ConditioningProvider conditioningProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     lightningProvider = context.watch<LightingProvider>();
+    conditioningProvider = context.watch<ConditioningProvider>();
+  }
+
+  void goToList() {
+    Navigator.of(context).pushNamed(AppRoutes.appliancesList);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScrollableScreenCanvas(
+    return ScreenCanvas(
+      appBarActions: [
+        IconButton(onPressed: goToList, icon: Icon(Icons.list_alt_outlined)),
+      ],
       widget: CustomScrollView(
         slivers: [
-          const SliverAppBar(title: Text('My Appliances')),
+          const SliverAppBar(title: Text('Lights'), expandedHeight: 100),
           SmallAppliancesBuilder(
             manipulateGadget: lightningProvider.editLightingAppliance,
             appliances: lightningProvider.lighting,
+          ),
+          const SliverAppBar(title: Text('Conditioning'), expandedHeight: 100),
+          BigAppliancesBuilder(
+            appliances: conditioningProvider.conditioners,
+            manipulateGadget: conditioningProvider.editConditioningAppliance,
           ),
         ],
       ),

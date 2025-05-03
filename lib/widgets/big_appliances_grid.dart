@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:smart_home/models/gadget.dart';
+import 'package:smart_home/services/conditioning.dart';
 import 'package:smart_home/services/light.dart';
 
-class SmallAppliancesBuilder extends StatefulWidget {
+class BigAppliancesBuilder extends StatefulWidget {
   final List<Gadget> appliances;
   final void Function(Gadget gadget) manipulateGadget;
 
-  const SmallAppliancesBuilder({
+  const BigAppliancesBuilder({
     super.key,
     required this.appliances,
     required this.manipulateGadget,
   });
 
   @override
-  State<SmallAppliancesBuilder> createState() => _SmallAppliancesBuilderState();
+  State<BigAppliancesBuilder> createState() => _BigAppliancesBuilderState();
 }
 
-class _SmallAppliancesBuilderState extends State<SmallAppliancesBuilder> {
+class _BigAppliancesBuilderState extends State<BigAppliancesBuilder> {
   IconData getIcon(Gadget gadget) {
-    if (gadget is Light) {
-      return switch (gadget.state) {
-        LightState.on || LightState.onMovement => Icons.lightbulb_outline,
-        _ => Icons.lightbulb,
+    if (gadget is Conditioning && gadget.state == ConditionState.on) {
+      return switch (gadget.mode) {
+        ConditioningMode.cooling => Icons.snowing,
+      ConditioningMode.heating => Icons.sunny,
+        _ => Icons.air,
       };
     }
-    return Icons.question_mark_rounded;
+    return Icons.mode_fan_off_rounded;
   }
 
   String getDisplayMessage(Gadget gadget) {
@@ -35,15 +37,11 @@ class _SmallAppliancesBuilderState extends State<SmallAppliancesBuilder> {
   }
 
   void switchGadget(Gadget gadget) {
-    if (gadget is Light) {
-      final editedGadget = switchLight(gadget);
-      widget.manipulateGadget(editedGadget);
-    }
   }
 
   void pushGadget(Gadget gadget) {
-    if (gadget is Light) {
-      final editedGadget = switchToDetectMovement(gadget);
+    if (gadget is Conditioning) {
+      final editedGadget = turnConditioning(gadget);
       widget.manipulateGadget(editedGadget);
     }
   }
@@ -54,10 +52,10 @@ class _SmallAppliancesBuilderState extends State<SmallAppliancesBuilder> {
     return SliverGrid(
       // itemCount: widget.appliances.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: 1,
       ),
       delegate: SliverChildBuilderDelegate(
-        (ctx, idx) => InkWell(
+            (ctx, idx) => InkWell(
           onTap: () => {switchGadget(widget.appliances[idx])},
           onLongPress: () {
             pushGadget(widget.appliances[idx]);
