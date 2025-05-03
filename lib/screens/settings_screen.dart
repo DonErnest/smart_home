@@ -18,6 +18,7 @@ class _SettingsScreenState extends State<GadgetSettingsScreen> {
   late Gadget gadget;
   late ConditioningProvider conditioningProvider;
   late LightingProvider lightningProvider;
+  late TeapotProvider teapotProvider;
 
   final gadgetFormController = GadgetFormController();
 
@@ -26,6 +27,7 @@ class _SettingsScreenState extends State<GadgetSettingsScreen> {
     super.didChangeDependencies();
     conditioningProvider = context.watch<ConditioningProvider>();
     lightningProvider = context.watch<LightingProvider>();
+    teapotProvider = context.watch<TeapotProvider>();
     final gadgetArgs = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final gadgetId = gadgetArgs["id"];
     final gadgetType = gadgetArgs["type"];
@@ -36,6 +38,10 @@ class _SettingsScreenState extends State<GadgetSettingsScreen> {
             .id == gadgetId);
       case GadgetType.light:
         gadget = lightningProvider.lighting.firstWhere((gadget) =>
+        gadget.id ==
+            gadgetId);
+      case GadgetType.teapot:
+        gadget = teapotProvider.teapots.firstWhere((gadget) =>
         gadget.id ==
             gadgetId);
     }
@@ -55,6 +61,9 @@ class _SettingsScreenState extends State<GadgetSettingsScreen> {
         conditioningProvider.editConditioningAppliance(editedGadget);
       } else if (gadget is Light) {
         final editedGadget = gadgetFormController.getUpdatedLight(gadget as Light);
+        lightningProvider.editLightingAppliance(editedGadget);
+      } else if (gadget is Teapot) {
+        final editedGadget = gadgetFormController.getUpdatedTeapot(gadget as Teapot);
         lightningProvider.editLightingAppliance(editedGadget);
       }
       Navigator.pop(context);

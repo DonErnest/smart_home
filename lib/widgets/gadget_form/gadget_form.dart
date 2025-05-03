@@ -24,6 +24,7 @@ class _GadgetFormState extends State<GadgetForm> {
   late final List<bool> selectedModes;
   late LightingProvider lightningProvider;
   late ConditioningProvider conditioningProvider;
+  late TeapotProvider teapotProvider;
 
   late ConditioningMode? selectedMode;
 
@@ -32,6 +33,7 @@ class _GadgetFormState extends State<GadgetForm> {
     super.didChangeDependencies();
     lightningProvider = context.watch<LightingProvider>();
     conditioningProvider = context.watch<ConditioningProvider>();
+    teapotProvider = context.watch<TeapotProvider>();
   }
 
   @override
@@ -52,6 +54,9 @@ class _GadgetFormState extends State<GadgetForm> {
     } else if (widget.gadget is Light) {
       final lightning = widget.gadget as Light;
       widget.controller.nameController.text = lightning.name;
+    } else if (widget.gadget is Teapot) {
+      final teapot = widget.gadget as Teapot;
+      widget.controller.nameController.text = teapot.name;
     }
   }
 
@@ -105,6 +110,30 @@ class _GadgetFormState extends State<GadgetForm> {
       ];
     } else if (gadget is Light) {
       return [];
+    } else if (gadget is Teapot) {
+      return [
+        FormField<bool>(
+          initialValue: gadget.sendingDataToCIA,
+          validator: (value) => value == false ? "You are cute. Ha-ha. No" : null,
+          builder: (FormFieldState<bool> state) {
+            return Column(
+              children: [
+                Switch(
+                  value: state.value ?? false,
+                  onChanged: (bool newValue) {
+                    state.didChange(newValue);
+                  },
+                ),
+                if (state.hasError)
+                  Text(
+                    state.errorText!,
+                    style: TextStyle(color: Colors.red),
+                  ),
+              ],
+            );
+          },
+        ),
+      ];
     }
     return [];
   }
@@ -130,6 +159,7 @@ class _GadgetFormState extends State<GadgetForm> {
                 final allGadgets = <Gadget>[
                   ...lightningProvider.lighting,
                   ...conditioningProvider.conditioners,
+                  ...teapotProvider.teapots,
                 ];
                 if (allGadgets.indexWhere(
                       (gadget) =>
@@ -141,6 +171,7 @@ class _GadgetFormState extends State<GadgetForm> {
                 return null;
               },
             ),
+
             if (formFields.isNotEmpty) ...formFields,
           ],
         ),

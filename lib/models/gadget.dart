@@ -186,12 +186,27 @@ final sampleTeapotAppliances = [
     waterLevelMl: 400.0,
     sendingDataToCIA: true,
   ),
+  Teapot(
+    name: "Чайник в подвале",
+    status: GadgetStatus.disconnected,
+    state: TeapotState.idle,
+    temperature: 20.0,
+    waterLevelMl: 400.0,
+    sendingDataToCIA: true,
+  ),
 ];
 
 final sampleConditioningAppliances = [
   Conditioning(
     name: "Спальня",
     status: GadgetStatus.active,
+    temperature: 27,
+    mode: ConditioningMode.cooling,
+    state: ConditionState.on,
+  ),
+  Conditioning(
+    name: "Чердак",
+    status: GadgetStatus.disconnected,
     temperature: 27,
     mode: ConditioningMode.cooling,
     state: ConditionState.on,

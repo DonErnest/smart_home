@@ -22,6 +22,7 @@ class GadgetProvider extends ChangeNotifier {
 class LightingProvider extends GadgetProvider {
   List<Light> _lighting = sampleLightingAppliances;
   List<Light> get lighting => _lighting;
+  List<Light> get activeLighting => _lighting.where((gadget) => gadget.status == GadgetStatus.active).toList();
 
   void addLightingAppliance(Light newAppliance) {
     addAppliance(_lighting, newAppliance);
@@ -36,6 +37,7 @@ class LightingProvider extends GadgetProvider {
 class ConditioningProvider extends GadgetProvider {
   List<Conditioning> _conditioners = sampleConditioningAppliances;
   List<Conditioning> get conditioners => _conditioners;
+  List<Conditioning> get activeConditioners => _conditioners.where((gadget) => gadget.status == GadgetStatus.active).toList();
 
   void addConditioningAppliance(Conditioning newAppliance) {
     addAppliance(_conditioners, newAppliance);
@@ -51,6 +53,7 @@ class ConditioningProvider extends GadgetProvider {
 class TeapotProvider extends GadgetProvider {
   List<Teapot> _teapots = sampleTeapotAppliances;
   List<Teapot> get teapots => _teapots;
+  List<Teapot> get activeTeapots => _teapots.where((gadget) => gadget.status == GadgetStatus.active).toList();
 
   Map<String, Timer> boilingTimers= {};
 

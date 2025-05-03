@@ -31,4 +31,11 @@ class GadgetFormController {
     return newEditedLightning;
   }
 
+  Teapot getUpdatedTeapot(Teapot editedTeapot) {
+    final newEditedLightning = editedTeapot.copyWith(
+      name: nameController.text,
+    );
+    return newEditedLightning;
+  }
+
 }

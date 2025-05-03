@@ -41,20 +41,20 @@ class _SmartWidgetsScreenState extends State<SmartWidgetsScreen> {
           const SliverAppBar(title: Text('Lights'), expandedHeight: 100),
           SmallAppliancesBuilder(
             manipulateGadget: lightningProvider.editLightingAppliance,
-            appliances: lightningProvider.lighting,
+            appliances: lightningProvider.activeLighting,
             startAsyncManipulation: (_){},
             cancelAsyncManipulation: (_) {},
           ),
           const SliverAppBar(title: Text('Teapots'), expandedHeight: 100),
           SmallAppliancesBuilder(
             manipulateGadget: teapotProvider.editTeapot,
-            appliances: teapotProvider.teapots,
+            appliances: teapotProvider.activeTeapots,
             startAsyncManipulation: teapotProvider.initiateBoiling,
             cancelAsyncManipulation: teapotProvider.cancelAsyncProcess,
           ),
           const SliverAppBar(title: Text('Conditioning'), expandedHeight: 100),
           BigAppliancesBuilder(
-            appliances: conditioningProvider.conditioners,
+            appliances: conditioningProvider.activeConditioners,
             manipulateGadget: conditioningProvider.editConditioningAppliance,
           ),
         ],
